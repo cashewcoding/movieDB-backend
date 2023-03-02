@@ -19,6 +19,31 @@ moviesRouter.get("/", (req, res) => {
     .catch((e) => res.status(500).json({ message: e.message }));
 });
 
+// GET ALL MOVIES FROM ONE GENRE
+moviesRouter.get("/genre/:genre", (req, res) => {
+  pool
+    .query("SELECT * FROM movies WHERE genre = $1;", [req.params.genre])
+    .then((data) => {
+      console.log(data);
+      res.json(data.rows);
+    })
+    .catch((e) => res.status(500).json({ message: e.message }));
+});
+
+// SEARCH MOVIES
+// const query = req.query.query;
+moviesRouter.get("/search/", (req, res) => {
+  pool
+    .query("SELECT * FROM movies WHERE title ILIKE $1 OR director ILIKE $1;", [
+      `%${req.query.query}%`,
+    ])
+    .then((data) => {
+      console.log(data);
+      res.json(data.rows);
+    })
+    .catch((e) => res.status(500).json({ message: e.message }));
+});
+
 // GET A SPECIFIC MOVIE WITH ID
 moviesRouter.get("/:id", (req, res) => {
   const id = req.params.id;
@@ -36,7 +61,7 @@ moviesRouter.get("/:id", (req, res) => {
 
 // CREATE NEW MOVIE
 moviesRouter.post("/", (req, res) => {
-  const { title, director, year, rating, poster, description, imgurl } =
+  const { title, director, year, genre, rating, poster, description, imgurl } =
     req.body; // form data from body
   pool
     .query(
@@ -53,7 +78,7 @@ moviesRouter.post("/", (req, res) => {
 // UPDATE MOVIE
 moviesRouter.put("/:id", (req, res) => {
   const id = req.params.id;
-  const { title, director, year, rating, poster, description, imgurl } =
+  const { title, director, year, genre, rating, poster, description, imgurl } =
     req.body; // form data from body
   pool
     .query(
