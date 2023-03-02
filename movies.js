@@ -32,7 +32,7 @@ moviesRouter.get("/genre/:genre", (req, res) => {
 
 // SEARCH MOVIES
 // const query = req.query.query;
-moviesRouter.get("/search/", (req, res) => {
+moviesRouter.get("/search", (req, res) => {
   pool
     .query("SELECT * FROM movies WHERE title ILIKE $1 OR director ILIKE $1;", [
       `%${req.query.query}%`,
