@@ -11,7 +11,7 @@ moviesRouter.use(cors());
 // GET ALL MOVIES
 moviesRouter.get("/", (req, res) => {
   pool
-    .query("SELECT * FROM movies;")
+    .query("SELECT * FROM movies ORDER BY created DESC;")
     .then((data) => {
       console.log(data);
       res.json(data.rows);
@@ -64,8 +64,8 @@ moviesRouter.post("/", (req, res) => {
     req.body; // form data from body
   pool
     .query(
-      "INSERT INTO movies (title, director, year, rating, poster, description, imgurl, created) VALUES ($1,$2,$3,$4,$5,$6,$7,NOW()) RETURNING *;",
-      [title, director, year, rating, poster, description, imgurl]
+      "INSERT INTO movies (title, director, year, genre, rating, poster, description, imgurl, created) VALUES ($1,$2,$3,$4,$5,$6,$7,NOW()) RETURNING id;",
+      [title, director, year, genre, rating, poster, description, imgurl]
     )
     .then((data) => {
       console.log(data);
@@ -81,8 +81,8 @@ moviesRouter.put("/:id", (req, res) => {
     req.body; // form data from body
   pool
     .query(
-      "UPDATE movies SET title=$1,director=$2,year=$3,rating=$4,poster=$5,description=$6,imgurl=$7 WHERE id=$8 RETURNING *;",
-      [title, director, year, rating, poster, description, imgurl, id]
+      "UPDATE movies SET title=$1,director=$2,year=$3,genre=$4,rating=$5,poster=$6,description=$7,imgurl=$8 WHERE id=$9 RETURNING *;",
+      [title, director, year, genre, rating, poster, description, imgurl, id]
     )
     .then((data) => {
       console.log(data);
