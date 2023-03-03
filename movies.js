@@ -64,7 +64,7 @@ moviesRouter.post("/", (req, res) => {
     req.body; // form data from body
   pool
     .query(
-      "INSERT INTO movies (title, director, year, genre, rating, poster, description, imgurl, created) VALUES ($1,$2,$3,$4,$5,$6,$7,NOW()) RETURNING id;",
+      "INSERT INTO movies (title, director, year, genre, rating, poster, description, imgurl, created) VALUES ($1,$2,$3,$4,$5,$6,$7,$8,NOW()) RETURNING id;",
       [title, director, year, genre, rating, poster, description, imgurl]
     )
     .then((data) => {
